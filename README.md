@@ -41,8 +41,8 @@ Windows Phone users have to manually add the [Google Analytics SDK for Windows 8
 v1.0.0 -- api change from ```window.analytics``` to ```window.ga```, 'analytics' is deprecated since 1.0.0 and you should use the new api 'ga',
 because in the next release we are removing the analytics.
 
-v1.7.x -- since this version there are new parameters in some of the old methods like `startTrackerWithId('UA-XXXX-YY', 30)` 
-and this is causing errors for those who are using the ionic 2(ionic-native) or ionic 1 (ngCordova); 
+v1.7.x -- since this version there are new parameters in some of the old methods like `startTrackerWithId('UA-XXXX-YY', 30)`
+and this is causing errors for those who are using the ionic 2(ionic-native) or ionic 1 (ngCordova);
 these wrapper interfaces don't have the new parameters at the time we did the changes; so please update you ionic framework to the lastest version.
 
 
@@ -113,6 +113,28 @@ To enable verbose logging:
 To enable/disable automatic reporting of uncaught exceptions
 * `window.ga.enableUncaughtExceptionReporting(Enable, success, error)` where Enable is boolean
 
+## Using multiple trackers:
+Without setting up multiple trackers, functions will all run against a tracker named `default`.
+
+When using multiple trackers, switch to your desired tracker before running any commands:
+* `window.ga.useTracker('customName')`
+
+For example:
+```
+window.ga.useTracker('customName');
+window.ga.setUserId('my-user-id');
+```
+
+Alternatively, this function allows a single additional function to be chained:
+```
+window.ga.useTracker('custom').setUserId('my-user-id');
+```
+
+Some commands will run against all trackers by default:
+* `window.ga.setOptOut(true)`
+* `window.ga.debugMode()`
+
+
 # Example use ionic 2
 
 ```javascript
@@ -122,7 +144,7 @@ To enable/disable automatic reporting of uncaught exceptions
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
       Splashscreen.hide();
-      
+
       GoogleAnalytics.startTrackerWithId('UA-00000000-0')
         .then(() => {
           console.log('Google analytics is ready now');
@@ -130,7 +152,7 @@ To enable/disable automatic reporting of uncaught exceptions
           GoogleAnalytics.debugMode();
           GoogleAnalytics.setAllowIDFACollection(true);
         })
-        .catch(e => console.log('Error starting GoogleAnalytics', e));      
+        .catch(e => console.log('Error starting GoogleAnalytics', e));
     });
   }
 ```
@@ -176,8 +198,8 @@ analyticsService.trackView('Home');
 
 # Browser (PWA)
 
-For browser (PWA), people who want to use the plugin in a website that has already integrated google analytics needs 
-to make sure that they remove the google analytics snippet from the head section of the page and change the global `ga` 
+For browser (PWA), people who want to use the plugin in a website that has already integrated google analytics needs
+to make sure that they remove the google analytics snippet from the head section of the page and change the global `ga`
 object name to something else. The plugin uses `nativeGa` instead. This can be changed by the following code.
 
 ```js
